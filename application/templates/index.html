@@ -1,0 +1,76 @@
+{% include 'head.html' %}
+
+{% include 'modals/intro.html' %}
+
+{% include 'modals/create.html' %}
+
+<div id="content" class="m-0">
+
+  <!-- splash -->
+  <section id="splash">
+    <div class="container-fluid">
+      <!-- name -->
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+          <h4 class="h4 font-weight-bold mt-5 mb-0">
+            <img src="{{ url_for('static', filename='fav.png') }}" class="m-0" style="padding-right:0.5rem;max-height: 35px;"> Modelmode.io
+          </h4>
+        </div>
+      </div>
+      <!-- intro -->
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 mt-5 mb-5">
+        <h1 class="h1">BSc Project</h1>
+        <p class="text-muted text-uppercase mt-3 mb-0">Web application to modify spreadsheet documents (use case: stock portfolio)</p>
+      </div>
+    </div>
+    <!-- navigation tabs -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8">
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a id="nav-upload-portfolio" href="#nav-upload-portfolio" class="nav-item nav-link active no-ripple" id="nav-upload-portfolio-tab"><i class="fas fa-upload"></i> Upload portfolio</a>
+            <a id="nav-create-new-portfolio" href="#" class="nav-item nav-link no-ripple" id="nav-create-new-portfolio-tab" data-toggle="modal" data-target="#modalCreate" data-backdrop="static" data-keyboard="false" role="tab"><i class="fas fa-plus"></i> Create new portfolio</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <!-- upload portfolio -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8">
+        <div class="tab-content card p-3" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-upload-portfolio" role="tabpanel" aria-labelledby="nav-upload-portfolio-tab">
+            <div class="container-fluid mb-3">
+              <div class="row">
+                <!-- browse file -->
+                <div class="col-8 col-md-10">
+                  <p class="card-text">Browse file to upload</p>
+                  <form id="upload_form" name="upload_form" method="post" enctype="multipart/form-data">
+                    <div class="input-group">
+                      <input type="text" class="form-control text-muted" style="background-image: none; padding-left: 15px;" disabled>
+                      <label class="input-group-btn mb-0">
+                        <span class="btn btn-secondary m-0" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"> 
+                          <i class="fas fa-folder-open"></i> Browse <input id="upload_input" name="file" type="file" style="display: none;">
+                        </span>
+                      </label>
+                    </div>
+                  </form>
+                </div>
+                <!-- button -->
+                <div class="col-4 col-md-2" style="border-left: 1px solid rgba(0, 0, 0, 0.05);margin-top:40px;">
+                  <button id="upload_button" form="upload_form" class="btn btn-raised btn-block btn-primary" type="submit">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'credits.html' %}
+
+</div><!-- ./content -->
+
+{% include 'footer.html' %}

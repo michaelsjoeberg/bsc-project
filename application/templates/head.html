@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" class='{% if request.path == "/" %}startpage{% endif %} {% if mode == "night" %}night-mode{% else %}normal-mode{% endif %}'>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>{{ title }}</title>
+
+<!-- Favicon -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='fav.png') }}">
+
+<!-- Bootstrap Material Design CSS STATIC -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-material-design.min.css') }}">
+
+<!-- Boostrap Select CSS STATIC -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-select.min.css') }}">
+
+<!-- DataTables CSS STATIC -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dataTables.bootstrap4.min.css') }}">
+
+<!-- Main CSS STATIC -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+<!-- jQuery JS STATIC -->
+<script src="{{ url_for('static', filename='jquery-3.2.1.min.js') }}"></script>
+
+</head>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <body onLoad="$('#modalMessage').modal({show: true, backdrop: 'static', keyboard: false});" class="">
+    
+      {% include 'modals/message.html' %}
+
+  {% else %}
+    <body class="">
+  {% endif %}
+{% endwith %}

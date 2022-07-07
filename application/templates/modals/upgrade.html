@@ -1,0 +1,49 @@
+<div class="modal fade" id="modalUpgrade" tabindex="-1" role="dialog" aria-labelledby="modalUpgrade" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered p-3" role="document">
+    <div class="modal-content">
+      <div class="modal-header pt-4">
+        <h5 class="modal-title">Unlock</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12 p-0">
+              <!-- unlock -->
+              <p>Did you already upgrade? Enter your email to unlock.</p>
+              <form id="formUnlock" method="post" enctype="multipart/form-data">
+                <input type="text" id="formType" name="formType" value="unlock_portfolio" hidden>
+                <label for="formUnlockEmail" class="small text-muted text-uppercase">Email (required)</label>
+                <input id="formUnlockEmail" name="formUnlockEmail" class="form-control" type="email" placeholder="michael@modelmode.io" required="true" autocomplete="email">
+                <button id="formUnlockSubmit" name="formUnlockSubmit" type="submit"class="btn btn-primary btn-raised mt-3"><i class="fas fa-unlock"></i> Unlock</button>
+              </form>
+              <div class="divider mb-3 mt-3"></div>
+              <!-- upgrade -->
+              <h5 class="modal-title">Upgraded features – $9.95</h5>
+              <p class="text-muted text-uppercase small">Upgrade valid for 30 days</p>
+              <p>Support this product (and me!) and get access to upgraded features:</p>
+              <p class="m-0"><i class="fas fa-plus mr-1"></i> Increased portfolio limit</p>
+              <p class="m-0"><i class="fas fa-plus mr-1"></i> Automatically update prices (real-time, 1h, 3h)</p>
+              <p class="m-0"><i class="fas fa-plus mr-1"></i> Additional stock data (open, close, PE)</p>
+              <p class=""><i class="fas fa-plus mr-1"></i> Company financials (profit, revenue, assets, liabilities).</p>
+              <p>Upgraded features are linked to an email (same as entered below) and can be gifted.</p>
+              <!-- Stripe JS -->
+              <script src="https://js.stripe.com/v3/"></script>
+              <!-- Stripe JS STATIC -->
+              <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='stripe.js') }}"></script>
+              <form action="/charge/{{ portfolio_id }}" method="post" id="payment-form" class="mt-3">
+                <label for="card-email" class="small text-muted text-uppercase">Email (required)</label>
+                <input id="card-email" name="card-email" class="form-control" type="email" placeholder="michael@modelmode.io" required="true" autocomplete="email">
+                <label for="card-element" class="small text-muted text-uppercase mt-3">Pay with credit or debit card</label>
+                <div id="card-element"></div>
+                <button class="btn btn-primary btn-raised mt-3">Submit Payment</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

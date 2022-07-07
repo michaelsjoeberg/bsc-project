@@ -1,0 +1,18 @@
+<div class="modal fade" id="modalClose" tabindex="-1" role="dialog" aria-labelledby="modalClose" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-400 p-3" role="document">
+    <div class="modal-content">
+      <div class="modal-header pt-4">
+        <h5 class="modal-title">Close</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p><span class="font-weight-bold">Important</span> Your session and portfolio data will be deleted (it's not possible to recover). Save to download portfolio-file, your portfolio data will be stored in this file, so keep it safe!</p>
+        <a id="save_button" class="btn btn-raised btn-primary btn-block" href="/save/{{ portfolio_id }}"><i class="fas fa-download"></i> Save</a>
+        <div class="divider mb-3 mt-3"></div>
+        <a id="end_button" class="btn btn-raised btn-secondary danger btn-block" href="/end_session/{{ portfolio_id }}"><i class="fas fa-times"></i> Delete and close</a>
+      </div>
+    </div>
+  </div>
+</div>

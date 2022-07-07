@@ -1,0 +1,327 @@
+{% include 'head.html' %}
+
+{% include 'modals/intro.html' %}
+
+{% include 'modals/close.html' %}
+
+{% include 'modals/help-add-ticker.html' %}
+
+{% include 'modals/remove-ticker.html' %}
+
+{% include 'modals/company-details.html' %}
+
+{% include 'modals/upgrade.html' %}
+
+{% include 'loading.html' %}
+
+{% include 'nav.html' %}
+
+<div id="content" class="">
+
+  <!-- only visible if portfolio value is not zero -->
+  {% if portfolio_value != 0 %}
+  {% if portfolio_profit > 0 %}
+  <section class="alert alert-success">
+  {% elif portfolio_change < 0 %}
+  <section class="alert alert-danger">
+  {% else %}
+  <section class="alert alert-secondary">
+    {% endif %}
+    <div class="container-fluid">
+      <div class="row justify-content-md-center">
+        <!-- total portfolio value -->
+        <div class="col-4 text-center">
+          <span class="m-0 small"><span class="font-weight-bold">{{ currency_symbol }} {{ "{0:.2f}".format(portfolio_value) }}</span></span>
+        </div>
+        <!-- change in value -->
+        <div class="col-4 text-center">
+          <span class="m-0 small">
+            {% if portfolio_profit > 0 %}
+            <i class="fas fa-arrow-up"></i> <span class="">{{ currency_symbol }} {{ "{0:.2f}".format(portfolio_profit) }}</span>
+            {% elif portfolio_change < 0 %}
+            <i class="fas fa-arrow-down"></i> <span class="">{{ currency_symbol }}{{ "{0:.2f}".format(portfolio_profit).replace("-","") }}</span>
+            {% else %}
+            <i class="fas fa-arrow-right"></i> <span class="">{{ currency_symbol }} {{ "{0:.2f}".format(portfolio_profit) }}</span>
+            {% endif %}
+          </span>
+        </div>
+        <!-- what else? -->
+        <div class="col-4 text-center">
+          <span class="m-0 small">
+            {% if portfolio_change > 0 %}
+            <span class="">+{{ "{0:.2f}".format(portfolio_change) }}%</span>
+            {% elif portfolio_change < 0 %}
+            <span class="">{{ "{0:.2f}".format(portfolio_change) }}%</span>
+            {% else %}
+            <span class="">{{ "{0:.2f}".format(portfolio_change) }}%</span>
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- add stock -->
+  <section>
+    <div class="container-fluid mt-3">
+      <form id="formAdd" method="post" enctype="multipart/form-data">
+        <input type="text" id="formType" name="formType" value="add_ticker" hidden>
+        <div class="row">
+          <!-- ticker -->
+          <div class="col-md-4">
+            <label for="formAddTicker" class="small text-muted text-uppercase m-0">Ticker (required)</label>
+            <select id="formAddTicker" name="formAddTicker" class="selectpicker form-control" data-live-search="true" data-dropupAuto="false" style="padding: 0.5rem;">
+              {% include 'stocks.html' %}
+            </select>
+          </div>
+          <!-- shares -->
+          <div class="col-md-2">
+            <label for="formAddShares" class="small text-muted text-uppercase m-0">Shares (optional)</label>
+            <div class="input-group">
+              <input id="formAddShares" name="formAddShares" type="number" class="form-control" placeholder="100" min="0" max="1000000000" step="0.00000001">
+            </div>
+          </div>
+          <!-- cost -->
+          <div class="col-md-4">
+            <label for="formAddCost" class="small text-muted text-uppercase m-0">Cost (optional) <a href="#" data-toggle="modal" data-target="#modalHelpAddTicker"><i class="fas fa-question-circle"></i></a></label>
+            <div class="input-group">
+              <input id="formAddCost" name="formAddCost" type="number" class="form-control" placeholder="2500" min="0" max="1000000000">
+              <select id="formSelectCurrency" name="formSelectCurrency" class="form-control dropdown-toggle m-0">
+                <option value="USD">$ US Dollar</option>
+                <option value="EUR">€ Euro</option>
+                <option value="GBP">£ Pound sterling</option>
+              </select>
+            </div>
+          </div>
+          <!-- button -->
+          <div class="col-md-2 text-right" style="padding-top: 24px;">
+            <button id="formAddSubmit" name="formAddSubmit" type="submit" class="btn btn-primary btn-raised btn-block">Add stock</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- divider -->
+  <section>
+    <div class="container-fluid pt-3 pb-3">
+      <div class="row">
+        <div class="col-12">
+          <div class="divider"></div>
+        </div>
+      </div>
+    </div>
+  </section> 
+
+  <!-- portfolio table -->
+  <section id="mainTable">
+    <div class="container-fluid">
+      <!-- tabs -->
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a id="nav-portfolio-tab" href="#nav-portfolio" class="nav-item nav-link active no-ripple pt-1 pb-4" data-toggle="tab" role="tab" aria-controls="nav-portfolio" aria-selected="true">Portfolio</a>
+              <a id="nav-news-tab" href="#nav-news" class="nav-item nav-link no-ripple pt-1 pb-4" data-toggle="tab" role="tab" aria-controls="nav-news" aria-selected="true">News</a>
+            </div>
+          </nav>
+        </div>
+        <div class="col-12 col-md-6">
+          <input type="text" id="mainTableSearch" class="form-control" placeholder="Search">
+        </div>
+      </div>
+      <!-- tab content -->
+      <div class="tab-content card p-3" id="nav-tabContent">
+
+        <!-- portfolio -->
+        <div class="tab-pane fade show active" id="nav-portfolio" role="tabpanel" aria-labelledby="nav-portfolio-tab">
+          <div class="container-fluid p-0">
+            <div class="row">
+
+              <!-- toggle columns -->
+              <div id="data-columns" class="col-12">
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="ticker">Ticker</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="company">Company</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="price">Price</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="market_cap">Market cap</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="change_day">Change (Day)</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="change_ytd">Change (YTD)</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="shares">Shares</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="allocation">Allocation</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="value">Value</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="cost">Cost</a>
+                <a href="" class="btn btn-outline btn-raised toggle-vis no-ripple" data-column="change">Change</a>
+              </div>
+
+              <!-- datatable -->
+              <div class="col-12">
+                <table id="tableStocks" class="table order-column table-hover nowrap" style="border-collapse: collapse !important; width: 100%;">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="border: 0">Ticker</th>
+                      <th scope="col" style="border: 0">Company</th>
+                      <th scope="col" style="border: 0">Price</th>
+                      <th scope="col" style="border: 0">Market cap</th>
+                      <th scope="col" style="border: 0">Change (Day)</th>
+                      <th scope="col" style="border: 0">Change (YTD)</th>
+                      <th scope="col" style="border: 0">Shares</th>
+                      <th scope="col" style="border: 0">Allocation</th>
+                      <th scope="col" style="border: 0">Value</th>
+                      <th scope="col" style="border: 0">Cost</th>
+                      <th scope="col" style="border: 0">Change</th>
+                      <th scope="col" class="no-sort" style="border: 0"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for stock in stock_lst %}
+                    <tr>
+                      <!-- ticker -->
+                      <th><span>{{ stock["ticker"] }}</span></th>
+                      <!-- name -->
+                      <td>
+                        <span>{{ stock["name"] }}</span>
+                        {% if stock["description"] != "None" %}
+                        <a href="#"
+                           data-toggle="modal" 
+                           data-target="#modalCompanyDetails"
+                           data-ticker="{{ stock['ticker'] }}"
+                           data-name="{{ stock['name'] }}"
+                           data-sector="{{ stock['sector'] }}"
+                           data-industry="{{ stock['industry'] }}"
+                           data-website="{{ stock['website'] }}"
+                           data-description="{{ stock['description'] }}"
+                           data-ceo="{{ stock['ceo'] }}"
+                           class="button-table data-company ml-1">
+                          <i class="fas fa-address-card"></i>
+                        </a>
+                        {% endif %}
+                      </td>
+                      <!-- price -->
+                      <td class="{% if stock['price'] == 0 %}text-muted{% endif %}" data-order='{{ stock["price"] }}'>
+                        <span>{{ currency_symbol }} {{ "{0:.2f}".format(stock["price"]) }}</span>
+                      </td>
+                      <!-- market cap -->
+                      <td class="{% if stock['marketcap'] == 0 %}text-muted{% endif %}" data-order='{{ stock["marketcap"] }}'>
+                        <span>{{ currency_symbol }} {{ "{0:.3f}".format(stock["marketcap"] / 1000000000) }} B</span>
+                      </td>
+                      <!-- day change -->
+                      <td class="{% if stock['day_change'] == 0 %}text-muted{% elif stock['day_change'] > 0 %}text-success{% elif stock['day_change'] < 0 %}text-danger{% endif %}">
+                        <span>{{ "{0:.2f}".format(stock["day_change"]) }}%</span>
+                      </td>
+                      <!-- year to date change -->
+                      <td class="{% if stock['ytd_change'] == 0 %}text-muted{% elif stock['ytd_change'] > 0 %}text-success{% elif stock['ytd_change'] < 0 %}text-danger{% endif %}">
+                        <span>{{ "{0:.2f}".format(stock["ytd_change"]) }}%</span>
+                      </td>
+                      <!-- shares, allocation, value, and cost -->
+                      <td class="{% if stock['shares'] == 0 %}text-muted{% endif %}">
+                        <span>
+                          {% if stock["shares"].is_integer() %}
+                          {{ "{0:.0f}".format(stock["shares"]) }}
+                          {% else %}
+                          {{ "{0:.4f}".format(stock["shares"]) }}
+                          {% endif %}
+                        </span>
+                      </td>
+                      <td class="{% if stock['shares'] == 0 %}text-muted{% endif %}">
+                        <span>{{ "{0:.2f}".format(stock["allocation"]) }}%</span>
+                      </td>
+                      <td class="{% if stock['shares'] == 0 %}text-muted{% endif %}">
+                        <span>{{ currency_symbol }} {{ "{0:.2f}".format(stock["value"]) }}</span>
+                      </td>
+                      <td class="{% if stock['shares'] == 0 %}text-muted{% endif %}">
+                        <span>{{ currency_symbol }} {{ "{0:.2f}".format(stock["cost"]) }}</span>
+                      </td>
+                      <!-- change -->
+                      <td class="{% if stock['change'] == 0 %}text-muted{% elif stock['change'] > 0 %}text-success{% elif stock['change'] < 0 %}text-danger{% endif %}">
+                        <span>{{ "{0:.2f}".format(stock["change"]) }}%</span>
+                      </td>
+                      <!-- delete button -->
+                      <td class="text-center">
+                        <a href="#" 
+                           data-toggle="modal" 
+                           data-target="#modalRemoveTicker"
+                           data-backdrop="static"
+                           data-keyboard="false"
+                           data-ticker='{{ stock["ticker"] }}'
+                           data-name='{{ stock["name"] }}' 
+                           class="button-table danger data-remove">
+                          <i class="fas fa-minus-circle"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- portfolio size -->
+              <div class="col-12 text-center">
+                {% if (not upgraded and stock_lst_size < 20) %}
+                <p class="text-muted text-uppercase small m-0 mt-3">{{ stock_lst_size }} / 20 (free limit)</p>
+                {% elif (not upgraded) %}
+                <p class="text-muted text-uppercase small m-0 mt-3">Maximum stock limit reached (free limit)</p>
+                <a id="upgrade" class="btn btn-raised btn-primary mt-3" href="" data-toggle="modal" data-target="#modalUpgrade" data-backdrop="static" data-keyboard="false"><i class="fas fa-unlock"></i> Unlock</a>
+                {% else %}
+                <p class="text-muted text-uppercase small m-0 mt-3">{{ stock_lst_size }} / 100</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- news -->
+        <div class="tab-pane fade p-3" id="nav-news" role="tabpanel" aria-labelledby="nav-news-tab">  
+          {% for stock in stock_lst %}
+          {% if stock["news"]["url"] != null %}
+          {% if stock != stock_lst[0] %}
+          <div class="divider mt-3 mb-3"></div>
+          {% endif %}
+          <div class="row">
+            <div class="col-12 col-md-2">
+              <p class="m-0"><span class="font-weight-bold">{{ stock["ticker"] }}</span></p>
+              <p class="text-muted small m-0">{{ stock["news"]["date"] }}</p>
+            </div>
+            <div class="col-12 col-md-10">
+              <p class="m-0"></p>
+              <a href='{{ stock["news"]["url"] }}' target="_blank">
+                <p class="m-0"><span class="font-weight-bold">{{ stock["news"]["headline"] }}</span> – {{ stock["news"]["summary"] }}</p>
+              </a>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% if upgraded %}
+  <section>
+    <div class="container-fluid">
+      <div class="row pt-5">
+        <div class="col-12 text-center">
+          <p class="text-muted text-uppercase small m-0">Upgraded features (expire {{ user['expire'] }})</p>
+          <!-- <p class="m-0">{{ user['email'] }}</p> -->
+          <p class="m-0">{{ user['email'] }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% else %}
+  <section>
+    <div class="container-fluid">
+      <div class="row pt-5">
+        <div class="col-12 text-center">
+          <a id="upgrade" class="btn btn-raised btn-cta btn-primary" href="" data-toggle="modal" data-target="#modalUpgrade" data-backdrop="static" data-keyboard="false"><i class="fas fa-unlock mr-3"></i> Unlock upgraded features</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+{% include 'credits.html' %}
+
+</div><!-- ./content -->
+
+{% include 'footer.html' %}

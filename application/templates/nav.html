@@ -1,0 +1,62 @@
+<nav id="portfolio-navigation" class="navbar navbar-expand-lg">
+  <img src="{{ url_for('static', filename='fav.png') }}" class="m-0" style="padding-right:0.5rem;">
+  <!-- mobile button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fas fa-ellipsis-v"></i></button>
+  <!-- collapse navbar -->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <!-- update prices -->
+      <li class="nav-item">
+        <a id="update_button" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false" href="/update/{{ portfolio_id }}"><i class="fas fa-sync-alt mr-1"></i> Update prices</a>
+      </li>
+      <!-- currency -->
+      <li class="nav-item dropdown">
+        {% if currency == 'EUR' %}
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">€ Euro</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/select_currency/{{ portfolio_id }}/USD">$ US Dollar</a>
+          <a class="dropdown-item" href="/select_currency/{{ portfolio_id }}/GBP">£ Pound sterling</a>
+        </div>
+        {% elif currency == 'GBP' %}
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">£ Pound sterling</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/select_currency/{{ portfolio_id }}/USD">$ US Dollar</a>
+          <a class="dropdown-item" href="/select_currency/{{ portfolio_id }}/EUR">€ Euro</a>
+        </div>
+        {% else %}
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">$ US Dollar</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/select_currency/{{ portfolio_id }}/EUR">€ Euro</a>
+          <a class="dropdown-item" href="/select_currency/{{ portfolio_id }}/GBP">£ Pound sterling</a>
+        </div>
+        {% endif %}
+      </li>
+      <!-- day/ night mode -->
+      <li class="nav-item">
+        {% if mode == "night" %}
+        <a id="toggle_mode_button" class="nav-link" role="button" href="/toggle_mode/{{ portfolio_id }}/day"><i class="fas fa-sun mr-1"></i> Day</a>
+        {% else %}
+        <a id="toggle_mode_button" class="nav-link" role="button" href="/toggle_mode/{{ portfolio_id }}/night"><i class="fas fa-moon mr-1"></i> Night</a>
+        {% endif %}
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <!-- export -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-export mr-1"></i> Export</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/export/{{ portfolio_id }}/CSV">CSV</a>
+          <a class="dropdown-item" href="/export/{{ portfolio_id }}/XLSX">XLSX</a>
+        </div>
+      </li>
+      <!-- save -->
+      <li class="nav-item">
+        <a id="save_button" class="nav-link" href="/save/{{ portfolio_id }}"><i class="fas fa-download mr-1"></i> Save</a>
+      </li>
+      <!-- close -->
+      <li class="nav-item">
+        <a href="#" class="nav-link" data-toggle="modal" data-target="#modalClose" data-backdrop="static" data-keyboard="false"><i class="fas fa-times mr-1"></i> Close</a>
+      </li>
+    </ul>
+  </div>
+</nav>
