@@ -14,6 +14,6 @@
 
 # Data sources
 
-- <a href="https://iextrading.com/developer" target="_blank">IEX Group</a>, view <a href="https://iextrading.com/api-exhibit-a/" target="_blank">Terms of Use</a>.
+- <a href="https://iextrading.com/developer" target="_blank">IEX Group</a>, see <a href="https://iextrading.com/api-exhibit-a/" target="_blank">Terms of Use</a>.
 
 - <a href="https://free.currencyconverterapi.com/" target="_blank">Currency Converter API</a>
