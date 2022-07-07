@@ -1,2 +1,5 @@
 
 .DS_Store
+application/static/bg.jpg
+application/static/fav.png
+*.pyc
